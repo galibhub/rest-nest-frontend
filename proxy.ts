@@ -1,15 +1,15 @@
-import { NextRequest, NextResponse } from "next/server";
+import {
+  NextRequest,
+  NextResponse,
+} from "next/server";
 
-export function middleware(
+export function proxy(
   request: NextRequest,
 ) {
-  const { pathname } =
-    request.nextUrl;
+  const { pathname } = request.nextUrl;
 
   const accessToken =
-    request.cookies.get(
-      "accessToken",
-    )?.value;
+    request.cookies.get("accessToken")?.value;
 
   const role =
     request.cookies.get("role")?.value;
@@ -20,36 +20,27 @@ export function middleware(
   const isPayment =
     pathname.startsWith("/payment");
 
+  // Not authenticated
   if (
     (isDashboard || isPayment) &&
     !accessToken
   ) {
-    const loginUrl = new URL(
-      "/auth/login",
-      request.url,
-    );
-
-    loginUrl.searchParams.set(
-      "redirect",
-      pathname,
-    );
-
     return NextResponse.redirect(
-      loginUrl,
+      new URL("/auth/login", request.url),
     );
   }
 
+  // Tenant
   if (
-    pathname.startsWith(
-      "/dashboard/tenant",
-    ) &&
+    pathname.startsWith("/dashboard/tenant") &&
     role !== "TENANT"
   ) {
     return NextResponse.redirect(
-      new URL("/", request.url),
+      new URL("/dashboard", request.url),
     );
   }
 
+  // Landlord
   if (
     pathname.startsWith(
       "/dashboard/landlord",
@@ -57,18 +48,17 @@ export function middleware(
     role !== "LANDLORD"
   ) {
     return NextResponse.redirect(
-      new URL("/", request.url),
+      new URL("/dashboard", request.url),
     );
   }
 
+  // Admin
   if (
-    pathname.startsWith(
-      "/dashboard/admin",
-    ) &&
+    pathname.startsWith("/dashboard/admin") &&
     role !== "ADMIN"
   ) {
     return NextResponse.redirect(
-      new URL("/", request.url),
+      new URL("/dashboard", request.url),
     );
   }
 

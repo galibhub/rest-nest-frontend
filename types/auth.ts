@@ -44,7 +44,6 @@ export interface LoginResponse {
   message: string;
   data: {
     accessToken: string;
-    refreshToken?: string;
-    user: AuthUser;
+    refreshToken: string;
   };
 }

@@ -6,14 +6,61 @@ export interface CreateRentalRequestPayload {
   message?: string;
 }
 
-export interface RentalRequestResponse {
+export type RentalRequestStatus =
+  | "PENDING"
+  | "APPROVED"
+  | "REJECTED"
+  | "ACTIVE"
+  | "COMPLETED";
+
+export interface RentalRequestProperty {
+  id: string;
+  title: string;
+  address?: string;
+  city: string;
+  rentAmount: number;
+  availability:
+    | "AVAILABLE"
+    | "RENTED"
+    | "UNAVAILABLE";
+}
+
+export interface RentalRequestPayment {
+  id: string;
+  amount: number;
+  provider: "STRIPE" | "SSLCOMMERZ";
+  status:
+    | "PENDING"
+    | "COMPLETED"
+    | "FAILED";
+  paidAt?: string | null;
+}
+
+export interface TenantRentalRequest {
+  id: string;
+  moveInDate: string;
+  status: RentalRequestStatus;
+  createdAt: string;
+
+  property: RentalRequestProperty & {
+    landlord?: {
+      id: string;
+      name: string;
+      email: string;
+    };
+  };
+
+  payment?: RentalRequestPayment | null;
+}
+
+export interface CreateRentalRequestResponse {
   success: boolean;
   statusCode: number;
   message: string;
   data: {
     id: string;
     moveInDate: string;
-    status: "PENDING" | "APPROVED" | "REJECTED";
+    status: RentalRequestStatus;
     createdAt: string;
 
     tenant: {
@@ -24,25 +71,26 @@ export interface RentalRequestResponse {
       role: string;
     };
 
-    property: {
-      id: string;
-      title: string;
-      city: string;
-      rentAmount: number;
-      availability:
-        | "AVAILABLE"
-        | "RENTED"
-        | "UNAVAILABLE";
-    };
+    property: RentalRequestProperty;
 
     message?: string | null;
   };
 }
 
+export interface TenantRentalRequestsResponse {
+  success: boolean;
+  statusCode: number;
+  message: string;
+  data: TenantRentalRequest[];
+}
+
 export interface LandlordRentalRequest {
   id: string;
   moveInDate: string;
-  status: "PENDING" | "APPROVED" | "REJECTED";
+  status:
+    | "PENDING"
+    | "APPROVED"
+    | "REJECTED";
   createdAt: string;
 
   tenant: {
@@ -51,16 +99,7 @@ export interface LandlordRentalRequest {
     email: string;
   };
 
-  property: {
-    id: string;
-    title: string;
-    city: string;
-    rentAmount: number;
-    availability:
-      | "AVAILABLE"
-      | "RENTED"
-      | "UNAVAILABLE";
-  };
+  property: RentalRequestProperty;
 }
 
 export interface LandlordRentalRequestsResponse {
@@ -70,59 +109,58 @@ export interface LandlordRentalRequestsResponse {
   data: LandlordRentalRequest[];
 }
 
-// ===============================
-// Create Rental Request - TENANT
-// ===============================
-
+// Create
 export const createRentalRequest = async (
   payload: CreateRentalRequestPayload,
-): Promise<RentalRequestResponse> => {
+): Promise<CreateRentalRequestResponse> => {
   const response =
-    await api.post<RentalRequestResponse>(
-      "/rental-requests",
+    await api.post<CreateRentalRequestResponse>(
+      "/rentals",
       payload,
     );
 
   return response.data;
 };
 
-// ===============================
-// Get Landlord Rental Requests
-// ===============================
-
-export const getLandlordRentalRequests =
-  async (): Promise<LandlordRentalRequestsResponse> => {
+// Tenant requests
+export const getTenantRentalRequests =
+  async (): Promise<TenantRentalRequestsResponse> => {
     const response =
-      await api.get<LandlordRentalRequestsResponse>(
-        "/rental-requests/landlord",
+      await api.get<TenantRentalRequestsResponse>(
+        "/rentals/tenant",
       );
 
     return response.data;
   };
 
-// ===============================
-// Approve Rental Request
-// ===============================
+// Landlord requests
+export const getLandlordRentalRequests =
+  async (): Promise<LandlordRentalRequestsResponse> => {
+    const response =
+      await api.get<LandlordRentalRequestsResponse>(
+        "/rentals/landlord",
+      );
 
+    return response.data;
+  };
+
+// Approve
 export const approveRentalRequest = async (
   requestId: string,
 ) => {
   const response = await api.patch(
-    `/rental-requests/${requestId}/approve`,
+    `/rentals/${requestId}/approve`,
   );
 
   return response.data;
 };
 
-// ===============================
-// Reject Rental Request
-// ===============================
-
+// Reject
 export const rejectRentalRequest = async (
   requestId: string,
 ) => {
   const response = await api.patch(
-    `/rental-requests/${requestId}/reject`,
+    `/rentals/${requestId}/reject`,
   );
 
   return response.data;

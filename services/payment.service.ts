@@ -1,9 +1,5 @@
 import api from "@/lib/axios";
 
-export interface CreateCheckoutSessionPayload {
-  rentalRequestId: string;
-}
-
 export interface CreateCheckoutSessionResponse {
   success: boolean;
   statusCode: number;
@@ -14,12 +10,14 @@ export interface CreateCheckoutSessionResponse {
 }
 
 export const createCheckoutSession = async (
-  payload: CreateCheckoutSessionPayload,
+  rentalRequestId: string,
 ): Promise<CreateCheckoutSessionResponse> => {
   const response =
     await api.post<CreateCheckoutSessionResponse>(
       "/payments/create-checkout-session",
-      payload,
+      {
+        rentalRequestId,
+      },
     );
 
   return response.data;
@@ -28,9 +26,12 @@ export const createCheckoutSession = async (
 export const getAllPayments = async (
   params?: Record<string, string | number>,
 ) => {
-  const response = await api.get("/payments", {
-    params,
-  });
+  const response = await api.get(
+    "/payments",
+    {
+      params,
+    },
+  );
 
   return response.data;
 };

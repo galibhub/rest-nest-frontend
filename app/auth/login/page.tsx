@@ -16,10 +16,15 @@ import {
   Home,
   Loader2,
 } from "lucide-react";
+import Cookies from "js-cookie";
 
-import { loginUser } from "@/services/auth.service";
-import { setAuthCookies } from "@/utils/cookies";
+import {
+  loginUser,
+  getMe,
+} from "@/services/auth.service";
+
 import { useAuthStore } from "@/store/auth.store";
+
 import type { LoginPayload } from "@/types/auth";
 
 const loginSchema = z.object({
@@ -42,6 +47,7 @@ export default function LoginPage() {
   );
 
   const [loading, setLoading] = useState(false);
+
   const [showPassword, setShowPassword] =
     useState(false);
 
@@ -64,47 +70,99 @@ export default function LoginPage() {
         password: data.password,
       };
 
+      // ===============================
+      // 1. Login
+      // ===============================
+
       const response = await loginUser(payload);
 
-      const { accessToken, user } =
-        response.data;
-
-      setAuthCookies(
+      const {
         accessToken,
-        user.role,
-      );
+      } = response.data;
+
+      if (!accessToken) {
+        throw new Error(
+          "Access token was not returned by the server.",
+        );
+      }
+
+      // ===============================
+      // 2. Save access token
+      // ===============================
+
+      Cookies.set("accessToken", accessToken, {
+        expires: 1,
+        sameSite: "lax",
+        path: "/",
+      });
+
+      // ===============================
+      // 3. Get authenticated user
+      // ===============================
+
+      const user = await getMe();
+
+      if (!user) {
+        throw new Error(
+          "Unable to retrieve logged-in user.",
+        );
+      }
+
+      // ===============================
+      // 4. Save role
+      // ===============================
+
+      Cookies.set("role", user.role, {
+        expires: 1,
+        sameSite: "lax",
+        path: "/",
+      });
+
+      // ===============================
+      // 5. Save Zustand auth state
+      // ===============================
 
       setAuth(user);
 
       toast.success("Login successful!");
 
-      if (user.role === "TENANT") {
-        router.replace("/dashboard/tenant");
-      } else if (
-        user.role === "LANDLORD"
-      ) {
-        router.replace(
-          "/dashboard/landlord",
-        );
-      } else if (
-        user.role === "ADMIN"
-      ) {
-        router.replace(
-          "/dashboard/admin",
-        );
-      } else {
-        router.replace("/");
-      }
-    } catch (error: any) {
+      // ===============================
+      // 6. Go to common dashboard
+      // ===============================
+
+      router.replace("/dashboard");
+    } catch (error: unknown) {
       console.error(
         "LOGIN ERROR:",
         error,
       );
 
-      const message =
-        error?.response?.data?.message ||
-        error?.message ||
+      let message =
         "Login failed. Please check your email and password.";
+
+      if (
+        typeof error === "object" &&
+        error !== null &&
+        "response" in error
+      ) {
+        const response = (
+          error as {
+            response?: {
+              data?: {
+                message?: string;
+              };
+            };
+          }
+        ).response;
+
+        message =
+          response?.data?.message ??
+          message;
+      } else if (
+        error instanceof Error
+      ) {
+        message = error.message;
+      }
 
       toast.error(message);
     } finally {
@@ -115,6 +173,7 @@ export default function LoginPage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-violet-50 px-4 py-12">
       <div className="mx-auto max-w-6xl">
+        {/* Back to Home */}
         <Link
           href="/"
           className="inline-flex items-center gap-2 text-sm font-medium text-slate-600 transition hover:text-blue-600"
@@ -124,7 +183,9 @@ export default function LoginPage() {
         </Link>
 
         <div className="mx-auto mt-8 grid max-w-5xl overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl lg:grid-cols-2">
-          {/* Left Side */}
+          {/* =========================
+              LEFT SIDE
+          ========================== */}
           <div className="hidden bg-gradient-to-br from-blue-600 via-indigo-600 to-violet-600 p-10 text-white lg:block">
             <div className="flex h-full flex-col justify-between">
               <div>
@@ -159,22 +220,22 @@ export default function LoginPage() {
                   <p className="mt-5 max-w-sm leading-7 text-blue-100">
                     Sign in to discover properties,
                     manage rental requests and
-                    continue your journey with
-                    RentNest.
+                    continue your journey with RentNest.
                   </p>
                 </div>
               </div>
 
               <div className="rounded-2xl bg-white/10 p-5 backdrop-blur">
                 <p className="text-sm text-blue-100">
-                  One account. Everything you
-                  need.
+                  One account. Everything you need.
                 </p>
               </div>
             </div>
           </div>
 
-          {/* Right Side */}
+          {/* =========================
+              RIGHT SIDE
+          ========================== */}
           <div className="p-6 sm:p-10">
             <div>
               <p className="text-sm font-bold uppercase tracking-[0.2em] text-blue-600">
@@ -186,8 +247,7 @@ export default function LoginPage() {
               </h1>
 
               <p className="mt-2 text-sm text-slate-500">
-                Enter your account details to
-                continue.
+                Enter your account details to continue.
               </p>
             </div>
 
@@ -255,6 +315,11 @@ export default function LoginPage() {
                       )
                     }
                     className="absolute right-3 top-1/2 -translate-y-1/2 rounded-lg p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+                    aria-label={
+                      showPassword
+                        ? "Hide password"
+                        : "Show password"
+                    }
                   >
                     {showPassword ? (
                       <EyeOff className="h-4 w-4" />
@@ -271,7 +336,7 @@ export default function LoginPage() {
                 )}
               </div>
 
-              {/* Login Button */}
+              {/* Login */}
               <button
                 type="submit"
                 disabled={loading}
@@ -288,6 +353,7 @@ export default function LoginPage() {
               </button>
             </form>
 
+            {/* Register */}
             <div className="mt-8 border-t border-slate-100 pt-6 text-center">
               <p className="text-sm text-slate-500">
                 Don&apos;t have an account?{" "}
