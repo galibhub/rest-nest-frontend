@@ -35,7 +35,7 @@
 
 # 📖 Project Overview
 
-RentNest is a full-stack rental property management platform that connects tenants, landlords, and administrators in one system.
+RentNest is a full-stack rental property management platform that connects tenants, landlords, and administrators in one systems.
 
 The frontend provides a role-based experience for:
 
