@@ -426,7 +426,7 @@ PATCH /api/rentals/:id/reject
 GET   /api/rentals/admin
 ```
 
-## Payments
+## Payments api
 
 ```text
 POST /api/payments/create-checkout-session
