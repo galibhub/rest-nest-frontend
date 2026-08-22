@@ -17,6 +17,9 @@
 
 </p>
 
+<p align="center">
+  <b>Full-stack rental platform with Tenant, Landlord, and Admin workflows.</b>
+</p>
 ---
 
 ## 🔗 Live Links
@@ -128,7 +131,7 @@ The frontend communicates with the RentNest REST API backend and uses Stripe Che
 - Backend webhook-based payment completion
 - Rental activation after successful payment
 
-### Payment Flow
+### Payments Flow 
 
 ```text
 Approved Rental Request
