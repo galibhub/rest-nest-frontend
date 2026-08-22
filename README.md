@@ -327,7 +327,7 @@ NEXT_PUBLIC_API_URL=http://localhost:3000/api
 npm run dev
 ```
 
-The frontend normally runs at:
+The frontend Link:
 
 ```text
 http://localhost:3001
