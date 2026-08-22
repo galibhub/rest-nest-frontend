@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
+
 import {
   ArrowLeft,
   ArrowRight,
@@ -19,13 +20,19 @@ import {
   Loader2,
   ShieldCheck,
 } from "lucide-react";
+
 import { toast } from "sonner";
 
 import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
+
 import { getSingleProperty } from "@/services/property.service";
+
 import type { Property } from "@/types/property";
+
 import { useAuthStore } from "@/store/auth.store";
+
+import PropertyReviews from "@/components/property/PropertyReviews";
 
 export default function PropertyDetailsPage() {
   const params = useParams();
@@ -58,9 +65,9 @@ export default function PropertyDetailsPage() {
         const response =
           await getSingleProperty(propertyId);
 
-        // Backend:
-        // response.data = property
-        setProperty(response?.data ?? null);
+        setProperty(
+          response?.data ?? null,
+        );
       } catch (error) {
         console.error(
           "Property details error:",
@@ -78,22 +85,30 @@ export default function PropertyDetailsPage() {
     loadProperty();
   }, [params.id]);
 
+  /* =========================================
+     Loading
+  ========================================= */
+
   if (loading) {
     return (
       <div className="min-h-screen bg-slate-50">
         <Navbar />
 
-        <div className="flex min-h-[70vh] items-center justify-center">
+        <main className="flex min-h-[70vh] items-center justify-center">
           <div className="flex items-center gap-3 text-slate-500">
             <Loader2 className="h-5 w-5 animate-spin" />
             Loading property...
           </div>
-        </div>
+        </main>
 
         <Footer />
       </div>
     );
   }
+
+  /* =========================================
+     Property not found
+  ========================================= */
 
   if (!property) {
     return (
@@ -108,8 +123,8 @@ export default function PropertyDetailsPage() {
           </h1>
 
           <p className="mt-3 text-slate-500">
-            This property may have been removed or
-            is no longer available.
+            This property may have been removed or is no
+            longer available.
           </p>
 
           <Link
@@ -126,6 +141,10 @@ export default function PropertyDetailsPage() {
     );
   }
 
+  /* =========================================
+     Property data
+  ========================================= */
+
   const images =
     property.images?.length > 0
       ? property.images
@@ -138,9 +157,6 @@ export default function PropertyDetailsPage() {
 
   const isAvailable =
     property.availability === "AVAILABLE";
-
-  const canRequest =
-    user?.role === "TENANT" && isAvailable;
 
   const handleRequestToRent = () => {
     if (!user) {
@@ -171,8 +187,6 @@ export default function PropertyDetailsPage() {
       return;
     }
 
-    // Next step:
-    // Request-to-rent form/modal
     router.push(
       `/properties/${property.id}/request`,
     );
@@ -183,7 +197,10 @@ export default function PropertyDetailsPage() {
       <Navbar />
 
       <main>
-        {/* Breadcrumb */}
+        {/* =====================================
+            Breadcrumb
+        ===================================== */}
+
         <div className="mx-auto max-w-7xl px-4 pt-8 sm:px-6 lg:px-8">
           <Link
             href="/properties"
@@ -194,9 +211,15 @@ export default function PropertyDetailsPage() {
           </Link>
         </div>
 
-        {/* Main */}
+        {/* =====================================
+            Main
+        ===================================== */}
+
         <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-          {/* Gallery */}
+          {/* =====================================
+              Gallery
+          ===================================== */}
+
           <div className="grid gap-4 lg:grid-cols-[1.4fr_0.6fr]">
             <div className="relative h-[360px] overflow-hidden rounded-3xl bg-slate-200 sm:h-[500px]">
               <Image
@@ -242,7 +265,9 @@ export default function PropertyDetailsPage() {
                   >
                     <Image
                       src={image}
-                      alt={`${property.title} ${index + 1}`}
+                      alt={`${property.title} ${
+                        index + 1
+                      }`}
                       fill
                       className="object-cover"
                       sizes="(max-width: 1024px) 50vw, 25vw"
@@ -252,9 +277,17 @@ export default function PropertyDetailsPage() {
             </div>
           </div>
 
+          {/* =====================================
+              Content
+          ===================================== */}
+
           <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_360px]">
-            {/* Details */}
+            {/* =====================================
+                Left
+            ===================================== */}
+
             <div>
+              {/* Property Details */}
               <div className="rounded-3xl border bg-white p-6 shadow-sm sm:p-8">
                 <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
                   <div>
@@ -281,7 +314,9 @@ export default function PropertyDetailsPage() {
                   <div className="shrink-0">
                     <p className="text-3xl font-black text-blue-600">
                       ৳
-                      {property.rentAmount.toLocaleString()}
+                      {Number(
+                        property.rentAmount,
+                      ).toLocaleString()}
                     </p>
 
                     <p className="text-right text-sm text-slate-400">
@@ -367,7 +402,10 @@ export default function PropertyDetailsPage() {
                 </div>
               </div>
 
-              {/* Landlord */}
+              {/* =====================================
+                  Landlord
+              ===================================== */}
+
               <div className="mt-8 rounded-3xl border bg-white p-6 shadow-sm sm:p-8">
                 <h2 className="text-xl font-black text-slate-900">
                   About the landlord
@@ -389,7 +427,10 @@ export default function PropertyDetailsPage() {
                         ?.email && (
                         <span className="flex items-center gap-2">
                           <Mail className="h-4 w-4" />
-                          {property.landlord.email}
+                          {
+                            property.landlord
+                              .email
+                          }
                         </span>
                       )}
 
@@ -397,16 +438,30 @@ export default function PropertyDetailsPage() {
                         ?.phone && (
                         <span className="flex items-center gap-2">
                           <Phone className="h-4 w-4" />
-                          {property.landlord.phone}
+                          {
+                            property.landlord
+                              .phone
+                          }
                         </span>
                       )}
                     </div>
                   </div>
                 </div>
               </div>
+
+              {/* =====================================
+                  Reviews
+              ===================================== */}
+
+              <PropertyReviews
+                propertyId={property.id}
+              />
             </div>
 
-            {/* Request Card */}
+            {/* =====================================
+                Request Card
+            ===================================== */}
+
             <aside className="h-fit lg:sticky lg:top-24">
               <div className="rounded-3xl border bg-white p-6 shadow-lg">
                 <p className="text-sm font-bold text-slate-500">
@@ -415,7 +470,9 @@ export default function PropertyDetailsPage() {
 
                 <p className="mt-1 text-4xl font-black text-blue-600">
                   ৳
-                  {property.rentAmount.toLocaleString()}
+                  {Number(
+                    property.rentAmount,
+                  ).toLocaleString()}
                 </p>
 
                 <p className="mt-1 text-sm text-slate-400">
@@ -465,7 +522,9 @@ export default function PropertyDetailsPage() {
                 <button
                   type="button"
                   disabled={!isAvailable}
-                  onClick={handleRequestToRent}
+                  onClick={
+                    handleRequestToRent
+                  }
                   className="mt-7 flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3.5 font-bold text-white shadow-lg shadow-blue-200 transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:shadow-none"
                 >
                   <CalendarDays className="h-4 w-4" />
@@ -483,8 +542,9 @@ export default function PropertyDetailsPage() {
                   <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-blue-600" />
 
                   <p className="text-xs leading-5 text-blue-700">
-                    Rental requests are reviewed by the
-                    landlord before payment is available.
+                    Rental requests are reviewed by
+                    the landlord before payment is
+                    available.
                   </p>
                 </div>
               </div>
@@ -497,6 +557,10 @@ export default function PropertyDetailsPage() {
     </div>
   );
 }
+
+/* =========================================
+   Info Card
+========================================= */
 
 function InfoCard({
   icon,
