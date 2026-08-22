@@ -435,7 +435,7 @@ GET  /api/payments/:id
 POST /api/payments/webhook
 ```
 
-## Reviews
+## Reviews api
 
 ```text
 POST   /api/reviews
@@ -450,7 +450,7 @@ DELETE /api/reviews/:id
 # 🔄 Main Rental Workflow
 
 ```text
-Tenant Login
+Tenant Login 
       ↓
 Browse Properties
       ↓
