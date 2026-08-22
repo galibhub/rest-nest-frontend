@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+
 import {
   ArrowRight,
   CalendarDays,
@@ -12,6 +13,7 @@ import {
   Loader2,
   MapPin,
 } from "lucide-react";
+
 import { toast } from "sonner";
 
 import Navbar from "@/components/shared/Navbar";
@@ -33,10 +35,15 @@ import type {
 
 interface PaymentItem {
   id: string;
+
   amount: number;
+
   provider: "STRIPE" | "SSLCOMMERZ";
+
   status: "PENDING" | "COMPLETED" | "FAILED";
+
   paidAt?: string | null;
+
   createdAt?: string;
 
   rentalRequest?: {
@@ -47,19 +54,15 @@ interface PaymentItem {
 }
 
 export default function TenantDashboard() {
-  const router = useRouter();
-
   const user = useAuthStore(
     (state) => state.user,
   );
 
-  const [requests, setRequests] = useState<
-    TenantRentalRequest[]
-  >([]);
+  const [requests, setRequests] =
+    useState<TenantRentalRequest[]>([]);
 
-  const [payments, setPayments] = useState<
-    PaymentItem[]
-  >([]);
+  const [payments, setPayments] =
+    useState<PaymentItem[]>([]);
 
   const [loading, setLoading] =
     useState(true);
@@ -78,7 +81,7 @@ export default function TenantDashboard() {
         ]);
 
         setRequests(
-          requestResponse.data ?? [],
+          requestResponse?.data ?? [],
         );
 
         setPayments(
@@ -137,6 +140,7 @@ export default function TenantDashboard() {
         <main className="flex min-h-[70vh] items-center justify-center">
           <div className="flex items-center gap-3 text-slate-500">
             <Loader2 className="h-5 w-5 animate-spin" />
+
             Loading dashboard...
           </div>
         </main>
@@ -174,6 +178,7 @@ export default function TenantDashboard() {
               className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-bold text-blue-700 hover:bg-blue-50"
             >
               Browse Properties
+
               <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
@@ -209,7 +214,7 @@ export default function TenantDashboard() {
           />
         </section>
 
-        {/* Shortcuts */}
+        {/* Quick Links */}
         <section className="mt-8 grid gap-4 sm:grid-cols-2">
           <Link
             href="/dashboard/tenant/requests"
@@ -385,6 +390,7 @@ function RequestRow({
         <div className="mt-2 flex flex-wrap gap-4 text-sm text-slate-500">
           <span className="flex items-center gap-1.5">
             <MapPin className="h-4 w-4 text-blue-600" />
+
             {request.property.city}
           </span>
 
@@ -398,7 +404,9 @@ function RequestRow({
 
           <span className="font-semibold">
             ৳
-            {request.property.rentAmount.toLocaleString()}
+            {Number(
+              request.property.rentAmount,
+            ).toLocaleString()}
             /month
           </span>
         </div>
@@ -446,7 +454,10 @@ function PaymentRow({
 
       <div className="text-left sm:text-right">
         <p className="font-black text-slate-900">
-          ৳{payment.amount.toLocaleString()}
+          ৳
+          {Number(
+            payment.amount || 0,
+          ).toLocaleString()}
         </p>
 
         <PaymentStatus
