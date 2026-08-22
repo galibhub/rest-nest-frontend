@@ -565,5 +565,5 @@ This project is licensed under the MIT License.
 ---
 
 <p align="center">
-Made with ❤️ for RentNest
+Made with  for RentNest
 </p>
