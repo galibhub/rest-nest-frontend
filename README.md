@@ -398,7 +398,7 @@ GET   /api/users
 PATCH /api/users/:id/status
 ```
 
-## Categories
+## Categories api
 
 ```text
 POST /api/categories
