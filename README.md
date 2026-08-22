@@ -416,7 +416,7 @@ DELETE /api/properties/:id
 GET    /api/properties/admin
 ```
 
-## Rental Requests
+## Rental Requests api
 
 ```text
 POST  /api/rentals
