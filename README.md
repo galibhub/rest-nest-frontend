@@ -1,196 +1,278 @@
-# RentNest
+# 🏠 RentNest Frontend
 
-A full-stack rental property management platform built with Next.js, TypeScript, Tailwind CSS, Express.js, Prisma, PostgreSQL, JWT authentication, and Stripe.
+<p align="center">
+  <b>A modern rental property management frontend built with Next.js, TypeScript, Tailwind CSS, Zustand, Axios, and Stripe Checkout.</b>
+</p>
 
-## Live Deployment
+<p align="center">
 
-Frontend: https://restnest-frontend-omega.vercel.app  
-Backend API: https://restnest-backend-pied.vercel.app
+![Next.js](https://img.shields.io/badge/Next.js-16.3.1-000000?style=for-the-badge&logo=next.js&logoColor=white)
+![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38BDF8?style=for-the-badge&logo=tailwindcss&logoColor=white)
+![Zustand](https://img.shields.io/badge/Zustand-000000?style=for-the-badge)
+![Axios](https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white)
+![Stripe](https://img.shields.io/badge/Stripe-635BFF?style=for-the-badge&logo=stripe&logoColor=white)
+![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
 
-## Features
+</p>
 
-### Authentication
-- Register and login
-- JWT authentication
-- HTTP-only cookies
-- Role-based access control
-- Tenant, Landlord, and Admin dashboards
+---
+
+## 🔗 Live Links
+
+| Resource | Link |
+|---|---|
+| 🚀 Live Frontend | https://restnest-frontend-omega.vercel.app |
+| 🔌 Live Backend API | https://restnest-backend-pied.vercel.app |
+| 💻 Frontend Repository | https://github.com/galibhub/rest-nest-frontend |
+| 🖥️ Backend Repository | https://github.com/galibhub/Rest-nest |
+
+---
+
+# 📖 Project Overview
+
+RentNest is a full-stack rental property management platform that connects tenants, landlords, and administrators in one system.
+
+The frontend provides a role-based experience for:
+
+- Discovering rental properties
+- Searching and filtering properties
+- Submitting rental requests
+- Managing properties as a landlord
+- Approving or rejecting rental requests
+- Monitoring payments
+- Managing users as an administrator
+- Reviewing properties after an active rental
+
+The frontend communicates with the RentNest REST API backend and uses Stripe Checkout for rental payments.
+
+---
+
+# ✨ Key Features
+
+## 🔐 Authentication
+
+- User registration
+- User login
 - Logout
+- JWT-based authentication
+- HTTP-only authentication cookies
+- Role-based dashboard routing
+- Tenant / Landlord / Admin access
 
-### Tenant
-- Browse properties
-- Search and filter properties
-- Property details
-- Check availability
-- Request to rent
-- Track rental requests
-- Payment history
-- Stripe checkout
-- Active rentals
-- Property reviews
+---
 
-### Landlord
-- Dashboard
-- My properties
-- Create property
-- Edit property
-- Delete property
-- Rental requests
-- Approve / reject requests
-- Payment overview
-- Revenue monitoring
+## 👤 Tenant Features
 
-### Admin
-- Dashboard
-- User management
+- Browse all properties
+- Search properties
+- Filter properties
+- View property details
+- View availability
+- Submit rental requests
+- Track rental request status
+- View rental request history
+- Pay approved rental requests
+- View payment history
+- View active rentals
+- Submit property reviews
+- Edit own reviews
+- Delete own reviews
+
+---
+
+## 🏠 Landlord Features
+
+- Landlord dashboard
+- View owned properties
+- Create properties
+- Edit properties
+- Delete properties
+- View incoming rental requests
+- Approve rental requests
+- Reject rental requests
+- View payment overview
+- View completed / pending payments
+- View rental revenue
+
+---
+
+## 👨‍💼 Admin Features
+
+- Admin dashboard
+- View all users
 - Search users
-- Active / blocked filtering
-- Block / unblock users
-- Property monitoring
-- Rental request monitoring
-- Payment overview
+- Filter users by status
+- Block users
+- Unblock users
+- View platform properties
+- Search platform properties
+- Monitor property availability
+- View rental requests
+- Monitor request status
+- View platform payments
+- Monitor completed / pending payments
+- View platform revenue
 
-### Payments
-- Stripe Checkout
-- Approved rental request payment
-- Stripe webhook
-- Payment status tracking
+---
+
+## 💳 Payment Features
+
+- Stripe Checkout integration
+- Approved rental requests can initiate payment
+- Stripe success page
+- Stripe cancel page
+- Payment history
+- Payment status display
+- Backend webhook-based payment completion
 - Rental activation after successful payment
-- Property availability update
-- Success / cancel pages
 
-### Reviews
+### Payment Flow
+
+```text
+Approved Rental Request
+        ↓
+Pay Now
+        ↓
+Stripe Checkout
+   ┌────┴────┐
+   ↓         ↓
+Success    Cancel
+   ↓         ↓
+/payment/  /payment/
+success    cancel
+   ↓
+Stripe Webhook
+   ↓
+Payment = COMPLETED
+   ↓
+Rental = ACTIVE
+   ↓
+Property = RENTED
+```
+
+---
+
+## ⭐ Review Features
+
 - Property review list
 - Average rating
 - 1–5 star rating
 - Create review
 - Edit own review
 - Delete own review
-- Active-rental requirement enforced by backend
+- Active-rental eligibility enforced by backend
+- One review per tenant per property
 
-## Demo Credentials
+---
+
+# 👥 User Roles
+
+| Role | Responsibilities |
+|---|---|
+| 👤 Tenant | Browse properties, request rentals, pay, review |
+| 🏠 Landlord | Manage properties, approve/reject requests, monitor payments |
+| 👨‍💼 Admin | Manage users and monitor platform activity |
+
+---
+
+# 🔑 Demo Credentials
 
 | Role | Email | Password |
 |---|---|---|
-| Admin | `admin@gmail.com` | `12345678` |
-| Landlord | `landlord@gmail.com` | `12345678` |
-| Tenant | `tenant@gmail.com` | `12345678` |
+| 👨‍💼 Admin | `admin@gmail.com` | `12345678` |
+| 🏠 Landlord | `landlord@gmail.com` | `12345678` |
+| 👤 Tenant | `tenant@gmail.com` | `12345678` |
 
-> Demo credentials are for testing only.
+> Demo credentials are for testing and demonstration purposes.
 
-## Tech Stack
+---
 
-### Frontend
-- Next.js 16
-- React
-- TypeScript
-- Tailwind CSS
-- Zustand
-- Axios
-- React Hook Form
-- Zod
-- Sonner
-- Lucide React
+# 🛠 Tech Stack
 
-### Backend
-- Node.js
-- Express.js
-- TypeScript
-- Prisma ORM
-- PostgreSQL
-- JWT
-- bcrypt
-- Stripe
-- Zod
+| Category | Technology |
+|---|---|
+| Framework | Next.js 16.3.1 |
+| UI | React |
+| Language | TypeScript |
+| Styling | Tailwind CSS |
+| State Management | Zustand |
+| HTTP Client | Axios |
+| Forms | React Hook Form |
+| Validation | Zod |
+| Notifications | Sonner |
+| Icons | Lucide React |
+| Payments | Stripe Checkout |
+| Deployment | Vercel |
 
-### Deployment
-- Vercel
+---
 
-## Frontend Structure
+# 📂 Project Structure
 
 ```text
 rentnest-frontend/
+│
 ├── app/
 │   ├── auth/
+│   │   ├── login/
+│   │   └── register/
+│   │
 │   ├── dashboard/
 │   │   ├── admin/
 │   │   ├── landlord/
-│   │   └── tenant/
+│   │   │   ├── payments/
+│   │   │   ├── properties/
+│   │   │   └── requests/
+│   │   ├── tenant/
+│   │   │   ├── payments/
+│   │   │   └── requests/
+│   │   └── page.tsx
+│   │
 │   ├── payment/
+│   │   ├── cancel/
+│   │   └── success/
+│   │
 │   └── properties/
+│       ├── [id]/
+│       └── page.tsx
+│
 ├── components/
+│   ├── property/
+│   │   └── PropertyReviews.tsx
+│   └── shared/
+│
 ├── services/
+│   ├── admin.service.ts
+│   ├── auth.service.ts
+│   ├── payment.service.ts
+│   ├── property.service.ts
+│   ├── rental-request.service.ts
+│   └── review.service.ts
+│
 ├── store/
+│   └── auth.store.ts
+│
 ├── types/
+│   ├── admin.ts
+│   ├── auth.ts
+│   ├── landlord.ts
+│   ├── property.ts
+│   └── review.ts
+│
 ├── utils/
+│   └── cookies.ts
+│
 ├── public/
 ├── package.json
 └── README.md
 ```
 
-### Main Service Files
+---
 
-```text
-services/
-├── admin.service.ts
-├── auth.service.ts
-├── payment.service.ts
-├── property.service.ts
-├── rental-request.service.ts
-└── review.service.ts
-```
+# ⚙️ Environment Variables
 
-## Environment Variables
-
-### Frontend
-
-`.env.local`
-
-```env
-NEXT_PUBLIC_API_URL=http://localhost:3000/api
-```
-
-Production:
-
-```env
-NEXT_PUBLIC_API_URL=https://restnest-backend-pied.vercel.app/api
-```
-
-### Backend
-
-Keep secrets out of Git.
-
-```env
-DATABASE_URL=your_database_url
-PORT=3000
-APP_URL=http://localhost:3000
-
-bcrypt_salt_rounds=10
-
-JWT_ACCESS_SECRET=your_access_secret
-JWT_REFRESH_SECRET=your_refresh_secret
-JWT_ACCESS_EXPIRES_IN=1d
-JWT_REFRESH_EXPIRES_IN=7d
-
-STRIPE_SECRET_KEY=your_stripe_secret
-STRIPE_WEBHOOK_SECRET=your_stripe_webhook_secret
-```
-
-Production backend:
-
-```env
-APP_URL=https://restnest-frontend-omega.vercel.app
-```
-
-## Local Development
-
-### Install
-
-```bash
-npm install
-```
-
-### Environment
+## Development
 
 Create `.env.local`:
 
@@ -198,13 +280,54 @@ Create `.env.local`:
 NEXT_PUBLIC_API_URL=http://localhost:3000/api
 ```
 
-### Start
+## Production
+
+Vercel Production Environment:
+
+```env
+NEXT_PUBLIC_API_URL=https://restnest-backend-pied.vercel.app/api
+```
+
+> Do not commit `.env.local` or any secret environment variables to GitHub.
+
+---
+
+# 🚀 Local Development
+
+## 1. Clone Repository
+
+```bash
+git clone https://github.com/galibhub/rest-nest-frontend.git
+cd rest-nest-frontend
+```
+
+## 2. Install Dependencies
+
+```bash
+npm install
+```
+
+## 3. Configure Environment
+
+Create:
+
+```text
+.env.local
+```
+
+Add:
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:3000/api
+```
+
+## 4. Start Development Server
 
 ```bash
 npm run dev
 ```
 
-Frontend normally runs on:
+The frontend normally runs at:
 
 ```text
 http://localhost:3001
@@ -212,61 +335,77 @@ http://localhost:3001
 
 Make sure the backend API is running.
 
-## Production Build
+---
+
+# 🧪 Production Build
+
+Before deployment:
 
 ```bash
 npm run build
 ```
 
-The build should complete successfully before deployment.
+The project should complete the Next.js production build successfully.
 
-## Deployment
+---
 
-### Frontend
+# 🚀 Deployment
+
+The frontend is deployed on Vercel.
+
+### Production
 
 ```bash
 vercel --prod
+```
+
+Live frontend:
+
+```text
+https://restnest-frontend-omega.vercel.app
 ```
 
 ### Backend
 
-```bash
-vercel --prod
-```
-
-## Main Business Flow
+Live backend:
 
 ```text
-Tenant
-  ↓
-Browse Properties
-  ↓
-Property Details
-  ↓
-Request to Rent
-  ↓
-Landlord Reviews Request
-  ↓
-Approve / Reject
-  ↓
-Tenant Pays
-  ↓
-Stripe Checkout
-  ↓
-Stripe Webhook
-  ↓
-Payment = COMPLETED
-  ↓
-Rental Request = ACTIVE
-  ↓
-Property = RENTED
-  ↓
-Tenant Can Review Property
+https://restnest-backend-pied.vercel.app
 ```
 
-## API Overview
+---
 
-### Properties
+# 🔌 Backend API
+
+Production API base URL:
+
+```text
+https://restnest-backend-pied.vercel.app/api
+```
+
+## Authentication
+
+```text
+POST /api/auth/register
+POST /api/auth/login
+GET  /api/auth/me
+```
+
+## Users
+
+```text
+GET   /api/users
+PATCH /api/users/:id/status
+```
+
+## Categories
+
+```text
+POST /api/categories
+GET  /api/categories
+```
+
+## Properties
 
 ```text
 POST   /api/properties
@@ -277,33 +416,26 @@ DELETE /api/properties/:id
 GET    /api/properties/admin
 ```
 
-### Rental Requests
+## Rental Requests
 
 ```text
-POST   /api/rentals
-GET    /api/rentals/landlord
-PATCH  /api/rentals/:id/approve
-PATCH  /api/rentals/:id/reject
-GET    /api/rentals/admin
+POST  /api/rentals
+GET   /api/rentals/landlord
+PATCH /api/rentals/:id/approve
+PATCH /api/rentals/:id/reject
+GET   /api/rentals/admin
 ```
 
-### Users
+## Payments
 
 ```text
-GET    /api/users
-PATCH  /api/users/:id/status
+POST /api/payments/create-checkout-session
+GET  /api/payments
+GET  /api/payments/:id
+POST /api/payments/webhook
 ```
 
-### Payments
-
-```text
-POST   /api/payments/create-checkout-session
-GET    /api/payments
-GET    /api/payments/:id
-POST   /api/payments/webhook
-```
-
-### Reviews
+## Reviews
 
 ```text
 POST   /api/reviews
@@ -313,60 +445,125 @@ PATCH  /api/reviews/:id
 DELETE /api/reviews/:id
 ```
 
-## Stripe
+---
 
-Stripe Checkout is used for rental payments.
-
-Success:
+# 🔄 Main Rental Workflow
 
 ```text
-https://restnest-frontend-omega.vercel.app/payment/success
+Tenant Login
+      ↓
+Browse Properties
+      ↓
+Property Details
+      ↓
+Request to Rent
+      ↓
+Landlord Reviews Request
+      ↓
+Approve / Reject
+      ↓
+Tenant Pays
+      ↓
+Stripe Checkout
+      ↓
+Webhook
+      ↓
+Payment Completed
+      ↓
+Rental Active
+      ↓
+Property Rented
+      ↓
+Tenant Can Review
 ```
 
-Cancel:
+---
+
+# ⭐ Review Workflow
 
 ```text
-https://restnest-frontend-omega.vercel.app/payment/cancel
+Active Tenant Rental
+        ↓
+Property Details
+        ↓
+Reviews
+        ↓
+Write Review
+        ↓
+1–5 Star Rating
+        ↓
+Comment
+        ↓
+Submit
+        ↓
+Edit / Delete Own Review
 ```
 
-The backend handles:
+---
+
+# 🔒 Security Notes
+
+- Never commit `.env.local`
+- Never expose Stripe secret keys in frontend code
+- Never expose JWT secrets in frontend code
+- Keep authentication tokens in secure HTTP-only cookies where applicable
+- Use HTTPS in production
+- Configure CORS for the production frontend origin
+- Rotate credentials if a secret has been accidentally exposed
+- Keep production secrets inside Vercel Environment Variables
+
+---
+
+# ✅ Current Project Status
+
+The frontend currently includes:
 
 ```text
-checkout.session.completed
+✅ Authentication
+✅ Role-based routing
+✅ Tenant dashboard
+✅ Landlord dashboard
+✅ Admin dashboard
+✅ Property browsing
+✅ Property search / filter
+✅ Property details
+✅ Property CRUD
+✅ Rental requests
+✅ Request approval / rejection
+✅ Stripe payment integration
+✅ Payment history
+✅ Payment success / cancel pages
+✅ Review system
+✅ Production deployment
+✅ Production API integration
 ```
 
-and updates payment, rental, and property state.
+---
 
-> Use Stripe test mode during development. Never commit secret Stripe keys.
-
-## Security
-
-- Never commit `.env` files.
-- Never expose Stripe secret keys in frontend code.
-- Never expose JWT secrets client-side.
-- Use secure HTTP-only cookies in production.
-- Use HTTPS in production.
-- Rotate secrets that have been accidentally exposed.
-
-## Current Status
-
-Core platform functionality is implemented:
-
-- Authentication
-- Role-based dashboards
-- Property listing and management
-- Rental requests
-- Landlord approval / rejection
-- Payments
-- Reviews
-- Admin management
-- Production frontend deployment
-- Production backend deployment
-
-## Author
+# 👨‍💻 Author
 
 **Ibrahim Ahmed Galib**
 
-GitHub: https://github.com/galibhub
+🎓 B.Sc. in Computer Science & Engineering  
+🏫 Daffodil International University
 
-Frontend Repository: https://github.com/galibhub/rest-nest-frontend
+GitHub:  
+https://github.com/galibhub
+
+Frontend Repository:  
+https://github.com/galibhub/rest-nest-frontend
+
+Backend Repository:  
+https://github.com/galibhub/Rest-nest
+
+---
+
+# 📄 License
+
+This project is licensed under the MIT License.
+
+---
+
+<p align="center">
+Made with ❤️ for RentNest
+</p>
