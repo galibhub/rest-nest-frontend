@@ -383,7 +383,7 @@ Production API base URL:
 https://restnest-backend-pied.vercel.app/api
 ```
 
-## Authentication
+## Authentication api
 
 ```text
 POST /api/auth/register
